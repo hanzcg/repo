@@ -1,0 +1,21 @@
+Esta es la segunda parte del script para encriptar, claro ya lo hemos encriptado en la primera parte, pero ayuda mas si lo podemos desencriptar no? Obviamente lo ideal es que nadie sepa que se puede desencriptar. Hay que tener en cuenta que el script anterior (ese que puse para encriptar) diferencia entre mayúsculas y minúsculas pues trabaja con los valores binarios de cada carácter, así que cuidado con eso al momento de encriptar con este script.
+
+Encriptar textos en SQL – Primera Parte
+
+Muy importante: ‘ColoqueAquiSuPropiaClave’ debe ser exactamente la misma que pusieron en el script anterior… si las claves son diferentes nunca se desencriptará el texto de forma adecuada. Sigo usando el «with encryption» para que el SP no sea leíble desde el SQL (repito: ES-KIU-EL y no SICUEL).
+
+Las explicaciones al final, hagan la prueba, solo les cuesta copiar y pegar:
+
+Explicación y algo más:
+
+Como habíamos comentado, el script anterior agregaba en la parte inicial de la cadena, caracteres al azar, con la intención de hacer perder el tiempo a quien intente desencriptarla pues siempre se empieza por la parte inicial de la cadena.
+
+Este script toma el 3er. y el 48vo. caracter para saber la longitud de la cadena original. A esta longitud se le duplica el valor pues por cada caracter que Uds. escriban el script le da dos caracteres diferentes en base a la llave que escribieron y lo escribe desde la sexta posición hasta la posición 45, pues los dos primeros caracteres son aleatorios, el 4to. y 5to. también así como el 46vo., 47vo, 49vo y el último.
+
+En nuestro ejemplo Hancito tenía 07 caracteres, significa que son 14 caracteres de la clave generada. Empezamos entonces a generar una cadena aleatoria en las 26 posiciones iniciales y colocamos la clave a partir de allí. Sumen 2 CA + 1 CL + 2 CA + 26 CA + 14 CE + 2 CA + 1 CL + 2 CA = 50 caracteres (CA = Caracteres Aleatorios, CL = Caracter de longitud, CE = Cadena Encriptada).
+
+Existen muchas formas de encriptar datos y esta es una opción mas, ya sea para que la utilices o le agregues funcionalidad.
+
+No olviden por favor las reglas que se deben seguir para crear contraseñas seguras…. Como mínimo 8 caracteres entre números, letras en mayúsculas y minúsculas y algún carácter especial. Nunca, algo relacionado con nosotros.
+
+Si le quieren dar un poco de más de seguridad, pueden enviar la clave de encriptación desde la aplicación como un parámetro más, así esa clave estará en código binario y será un poco mas difícil poder desencriptar las contraseñas.

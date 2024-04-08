@@ -1,0 +1,24 @@
+Mucho se ha escrito sobre este tema, tanto que ya no es necesario descubrir la rueda para encriptar sobretodo contraseñas (o cualquier otro dato), desde algoritmos sencillos (como sumar a cada valor ascii de cada caracter un valor cualquiera) hasta los mas complejos (como rijndael y otros) existen en todos lados a nuestra libre disposición.
+
+El propio SQL (en ingles se pronuncia ES-KIU-EL y no SICUEL como dicen algunos) Server propone una forma de encriptar los datos, si usamos PwdEncrypt(‘Mi contraseña’) obtendremos algo como esto:
+
+0x0100A36C176B9D8F41B774C25… este dato de tipo varbynary no esta nada mal, el problema es que ni el propio SQL Server lo puede desencriptar (o al menos asi parece). Si usamos PwdCompare(‘Mi contraseña’, ‘el binario con el que comparar’) lo único que conseguiremos será comparar ambas cadenas, cosa que tampoco esta mal…
+
+Nunca les ha pasado que un usuario final se olvida su contraseña y llama al Dpto. de Sistemas (Se supone que nuestro Dpto.) pidiendo que les digan su clave????, ah! pero eso si! en sus requerimientos piden que sus claves sean encriptadas para que nadie sepan que son. Bueno, hace poco hice este pequeño
+script que permite encriptar una cadena de hasta 20 caracteres en otra de 50 caracteres. A ver si se animan a copiar y pegar… la explicación esta al final.
+
+Explicación:
+
+Si por ejemplo escribo Hancito, el resultado será una cadena mas o menos como esta:
+
+Œê0ÉâE9¶ÀÉœ_bŒŸRÓuÊtžôû‡uÊAœšdótCd“d3dãdDƒy/7*a
+
+Bien, esa cadena tiene caracteres agregados por las puras… el encriptado original consta del doble de caracteres del texto enviado, o sea 14 caracteres en nuestro ejemplo, los otros 36 están por las puras, solo para despistar al enemigo. El truco esta aquí:
+
+Œê 0 ÉâE9¶ÀÉœ_bŒŸRÓuÊtžôû‡uÊAœš dótCd“d3dãdDƒ y/ 7 *a
+
+El tercer y 48vo. caracter contiene la informacion de la longitud original del texto (Hancito tiene 07 caracteres) y solo la parte que esta en negrita (dótCd“d3dãdDƒ) tiene el encriptado. Si alguien intenta desencriptarlo a la fuerza, empezará por delante y nunca descubrirá el texto (bueno, eso de nunca es un decir), esa cadena delantera es aleatoria.
+
+La instrucción with encryption permite encriptar todo el Stored Procedure en SQL, eso significa que ninguna persona lo podrá leer, ni siquiera quien lo creo, es decir que si pierden las fuentes, ya fueron. No se olviden de cambiar ‘ColoqueAquiSuPropiaClave’ por una clave de hasta 25 caracteres cualquiera, respetando las reglas para la creación de passwords que todos conocemos (Después escribiré sobre eso por si acaso alguien no sabe)
+
+Bueno, la discusión sobre este tema es larga, no pretendo que sea el mejor script para encriptar textos, pero me parece una buena alternativa. El script para desencriptar lo colocaré aparte porque juntos ocuparían mas espacio (por cierto ya ocupe bastante).
