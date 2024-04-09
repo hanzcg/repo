@@ -1,2 +1,2 @@
-# repo
-Code samples in different languages and technologies
+# Personal repository
+Code samples in different languages and technologies.
